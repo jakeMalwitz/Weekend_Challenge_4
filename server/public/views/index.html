@@ -30,12 +30,24 @@
           <input type="date" id="published" name="published"  class="form-control"/>
         </div>
 
+        <div class="form-group">
+          <label for="genre">Genre:</label>
+          <input type="text" id="genre" name="genre"  class="form-control"/>
+        </div>
+
         <button id="book-submit" class="btn btn-default">Go</button>
       </form>
 
       <h2>Books</h2>
-      <ul id="book-list">
+      <select class="genre">
+       <option value="Action">Action</option>
+       <option value="Horror">Horror</option>
+       <option value="Romance">Romance</option>
+       <option value="Non-Fiction">Non-Fiction</option>
+     </select>
 
+     <button id="sort">Sort</button>
+      <ul id="book-list">
       </ul>
     </main>
 
