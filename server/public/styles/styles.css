@@ -1,8 +1,16 @@
 h1 {
-  font-family: 'Taviraj', serif;
+  font-family: 'Times New Roman', serif;
   color: indigo;
 }
 
 h2 {
   color: gray;
+}
+
+#task-list {
+  color: red;
+}
+
+#completed {
+  color: green;
 }

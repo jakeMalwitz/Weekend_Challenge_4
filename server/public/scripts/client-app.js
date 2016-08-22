@@ -1,146 +1,122 @@
 $(document).ready(function () {
-  getBooks();
-  // add a book
-  $('#book-submit').on('click', postBook);
-  //update a book
-  $('#book-list').on('click', '.update', putBook);
-  //delte button
-  $('#book-list').on('click', '.delete', deleteBook);
-  //get specific genre of book
-   $("#sort").on('click', function(){
-    var tester = $("select.genre option:selected").val();
 
-    console.log(tester);
-    selectGenre(tester);
-  });
+  getTasks();
 
-  //$('.:selected').on('click', selectGenre("Action/Fantasy"));
+  $('#task-submit').on('click', postTask);
+  $('#task-list').on('click', '.complete', putTask);
+  $('#task-list').on('click', '.delete', deleteTask);
+
 });
-/**
- * Retrieve books from server and append to DOM
- */
-function getBooks() {
+
+function getTasks() {
   $.ajax({
     type: 'GET',
-    url: '/books',
-    success: function (books) {
-      console.log('GET /books returns:', books);
-      //Want to use inputs
-      appendBooks(books);
+    url: '/tasks',
+    success: function (tasks) {
+      appendTasks(tasks);
     },
 
     error: function (response) {
-      console.log('GET /books fail. No books could be retrieved!');
+    console.log('Error @ GET', response)
     },
   });
 }
 
-  function appendBooks(books){
-books.forEach(function (book) {
+  function appendTasks(tasks){
+tasks.forEach(function (task) {
+  console.log(task);
   var $el = $('<div></div>');
 
-  var bookProperties = ['title', 'author', 'published', 'genre'];
+  var taskProperties = ['task', 'status'];
 
-  bookProperties.forEach(function(property){
+  taskProperties.forEach(function(property){
     var inputType ='text';
-    if(property == 'published'){
-      inputType = 'date';
-      book[property] = new Date(book[property]);
-    }
     var $input = $('<input type="text" id="' + property + '"name="' + property + '"/>');
-    $input.val(book[property]);
+    $input.val(task[property]);
+    console.log(task[property]);
     $el.append($input);
   });
 
-$el.data('bookId', book.id);
-$el.append('<button class="update">Update</button>');
+$el.data('taskId', task.id);
+$el.append('<button class="complete">Complete</button>');
 $el.append('<button class="delete">Delete</button>');
 
-$('#book-list').append($el);
+
+if(task.status == true){
+  $('#completed').append($el);
+  $('.complete').remove();
+} else {
+  $('#task-list').append($el);
+}
 });
 }
-/**
- * Add a new book to the database and refresh the DOM
- */
-function postBook() {
+
+function postTask() {
   event.preventDefault();
 
-  var book = {};
+  var task = {};
 
-  $.each($('#book-form').serializeArray(), function (i, field) {
-    book[field.name] = field.value;
+  $.each($('#task-form').serializeArray(), function (i, field) {
+    task[field.name] = field.value;
   });
-
-  console.log('book: ', book);
 
   $.ajax({
     type: 'POST',
-    url: '/books',
-    data: book,
+    url: '/tasks',
+    data: task,
     success: function () {
-      console.log('POST /books works!');
-      $('#book-list').empty();
-      getBooks();
+
+      $('#task-list').empty();
+      $('#completed').empty();
+      getTasks();
     },
 
     error: function (response) {
-      console.log('POST /books does not work...');
+      console.log('ERROR @ POST', response);
     },
   });
 }
 
-  function putBook(){
-    var book = {};
+  function putTask(){
+    var task = {};
     var inputs = $(this).parent().children().serializeArray();
     $.each(inputs, function(i, field){
-      book[field.name] = field.value;
+      task[field.name] = field.value;
     });
-    console.log("Hey");
 
-var bookId = $(this).parent().data('bookId');
+var taskId = $(this).parent().data('taskId');
 
 $.ajax({
   type: 'PUT',
-  url: '/books/' + bookId,
-  data: book,
+  url: '/tasks/' + taskId,
+  data: task,
   success: function(){
-    $('#book-list').empty();
-    getBooks();
+    $('#task-list').empty();
+    $('#completed').empty();
+    getTasks();
   },
   error: function(){
-  console.log("Error PUT /books/" + bookId);
-  },
+  console.log("ERROR @ PUT", taskId);
+  }
 });
 }
 
-function deleteBook(){
-  var bookId = $(this).parent().data('bookId');
+function deleteTask(){
+
+  if(confirm("ARE YOU SURE YOU WANT TO DELETE THIS ELEMENT?")) {
+  var taskId = $(this).parent().data('taskId');
   $.ajax({
     type: 'DELETE',
-    url: '/books/' + bookId,
+    url: '/tasks/' + taskId,
     success: function(){
       console.log('Success');
-      $('#book-list').empty();
-      getBooks();
+      $('#task-list').empty();
+      $('#completed').empty();
+      getTasks();
     },
     error: function(){
-      console.log("Failed");
+      console.log("FAILURE");
     }
   });
-}//deleteBook
-
-function selectGenre(genre){
-
-  $.ajax({
-    type: 'GET',
-    url: '/select/' + genre,
-    success: function(book){
-    console.log('Does this work?:', book);
-    $('#book-list').empty();
-    appendBooks(book);
-  },
-  error: function() {
-    console.log("BLEEP");
-  }
-  });
+}
 }

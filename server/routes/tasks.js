@@ -4,14 +4,14 @@ var pg = require('pg');
 var connectionString = 'postgres://localhost:5432/omicron';
 
 router.get('/', function (req, res) {
-  // Retrieve books from database
+
   pg.connect(connectionString, function (err, client, done) {
     if (err) {
       res.sendStatus(500);
     }
 
-    client.query('SELECT * FROM books', function (err, result) {
-      done(); // closes connection, I only have 10!
+    client.query('SELECT * FROM tasks', function (err, result) {
+      done();
       if (err) {
         res.sendStatus(500);
       }
@@ -21,7 +21,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-  var book = req.body;
+  var task = req.body;
   console.log(req.body);
 
   pg.connect(connectionString, function (err, client, done) {
@@ -29,9 +29,9 @@ router.post('/', function (req, res) {
       res.sendStatus(500);
     }
 
-    client.query('INSERT INTO books (author, title, published, genre) '
-                + 'VALUES ($1, $2, $3, $4)',
-                [book.author, book.title, book.published, book.genre],
+    client.query('INSERT INTO tasks (task, status) '
+                + 'VALUES ($1, $2)',
+                [task.task, false],
                 function (err, result) {
                   done();
 
@@ -46,25 +46,21 @@ router.post('/', function (req, res) {
 
 router.put('/:id', function(req, res){
   var id = req.params.id;
-  var book = req.body;
+  var task = req.body;
 
   pg.connect(connectionString, function(err, client, done) {
     if (err){
       res.sendStatus(500);
     }
 
-    client.query('UPDATE books ' +
-  'SET author = $1, ' +
-  'title = $2, ' +
-  'published = $3, ' +
-  'genre = $4 ' +
-  'WHERE id = $5',
-[book.author, book.title, book.published, book.genre, id],
+    client.query('UPDATE tasks ' +
+  'SET status = $1 ' +
+  'WHERE id = $2',
+[true, id],
 function(err, result){
   done();
 
   if(err){
-    console.log("Hey 1", err);
     res.sendStatus(500);
     console.log(err)
   } else {
@@ -82,7 +78,7 @@ router.delete('/:id', function(req, res){
       res.sendStatus(500);
     }
 
-    client.query('DELETE FROM books ' +
+    client.query('DELETE FROM tasks ' +
                  'WHERE id= $1',
                  [id],
                  function(err, result){

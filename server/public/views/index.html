@@ -1,7 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Put that Postgres in that Node</title>
+    <title>Weekend Challenge 4</title>
     <script src="/vendor/jquery.min.js"></script>
     <script src="/scripts/client-app.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Taviraj" rel="stylesheet">
@@ -11,45 +11,30 @@
   <body>
     <main class="container">
       <header>
-        <h1>The Omicron Library presents...</h1>
+        <h1>To Do List...</h1>
       </header>
-      <h2>Add a book</h2>
-      <form id="book-form">
+      <h2>Add a task</h2>
+      <form id="task-form">
         <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" id="title" name="title" class="form-control" />
+          <label for="title">Task:</label>
+          <input type="text" id="task" name="task" class="form-control" />
         </div>
 
-        <div class="form-group">
-          <label for="author">Author:</label>
-          <input type="text" id="author" name="author" class="form-control" />
-        </div>
-
-        <div class="form-group">
-          <label for="published">Published:</label>
-          <input type="date" id="published" name="published"  class="form-control"/>
-        </div>
-
-        <div class="form-group">
-          <label for="genre">Genre:</label>
-          <input type="text" id="genre" name="genre"  class="form-control"/>
-        </div>
-
-        <button id="book-submit" class="btn btn-default">Go</button>
+        <button id="task-submit" class="btn btn-default">Add task</button>
       </form>
 
-      <h2>Books</h2>
-      <select class="genre">
-       <option value="Action">Action</option>
-       <option value="Horror">Horror</option>
-       <option value="Romance">Romance</option>
-       <option value="Non-Fiction">Non-Fiction</option>
-     </select>
-
-     <button id="sort">Sort</button>
-      <ul id="book-list">
+     <div>
+       <h2>Uncompleted Tasks</h2>
+      <ul id="task-list">
       </ul>
-    </main>
+    </div>
 
+     <div>
+       <h2>Completed Tasks</h2>
+      <ul id="completed">
+      </ul>
+    </div>
+
+    </main>
   </body>
 </html>
