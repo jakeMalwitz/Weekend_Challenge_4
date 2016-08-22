@@ -1,0 +1,7 @@
+CREATE TABLE tasks (
+id SERIAL PRIMARY KEY,
+task varchar(150)
+);
+
+ALTER TABLE tasks
+ADD COLUMN "status" BOOLEAN DEFAULT FALSE;

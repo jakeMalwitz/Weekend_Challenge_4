@@ -5,6 +5,7 @@ $(document).ready(function () {
   $('#task-submit').on('click', postTask);
   $('#task-list').on('click', '.complete', putTask);
   $('#task-list').on('click', '.delete', deleteTask);
+  $('#completed').on('click', '.delete', deleteTask);
 
 });
 
